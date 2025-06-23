@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="wrapper">
+        <div class="enter-background">
+            <img class="enter-background-img"  src="/static/images/register-bg-img.png">
+        </div>
+
+        <div class="header">
+            Присоединяйся к SmartTool!
+        </div>
+
+        <div class="enter-form">
+            <div class="enter-form-header">
+                <div class="enter-header-text-1">Регистрация</div>
+                <div class="enter-header-link">Есть аккаунт? <a href="/">Войти</a></div>
+            </div>
+            <div class="enter-form-area">
+                <div class="enter-form-field">
+                    <div class="enter-field-text">Имя пользователя:</div>
+                    <input class="enter-field-input" type="text" id="name">
+                </div>
+                
+                <div class="enter-form-group">
+                    <div class="enter-group-field">
+                        <div class="enter-group-text">Адрес электронной почты:</div>
+                        <input class="enter-group-input" type="email" id="email">
+                    </div>
+
+                    <div class="enter-group-field">
+                        <div class="enter-group-text">Должность:</div>
+                        <input class="enter-group-input-1" type="text" id="position">
+                    </div>
+                </div>
+                
+                <div class="enter-form-field">
+                    <div class="enter-field-text">Пароль:</div>
+                    <input class="enter-field-input" type="password" id="password">
+                </div>
+
+                <button class="enter-form-btn" onclick="register()">Зарегистрироваться</button>
+            </div>
+
+             
+        </div>
+    </div>
+
+    <script>
+        async function register() {
+            const name = document.getElementById("name").value;
+            const position = document.getElementById("position").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            const userData = {
+                email: email,
+                password: password,
+                name: name,
+                position: position
+            };
+
+            try {
+                const response = await fetch("/users/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(userData)
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    alert("Пользователь успешно добавлен! ID: " + result.id);
+                    document.getElementById("email").value = "";
+                    document.getElementById("password").value = "";
+                    document.getElementById("name").value = "";
+                    document.getElementById("position").value = "";
+                    window.location.href = "/";
+                } else {
+                    const errorData = await response.json();
+                    alert("Ошибка: " + errorData.detail); // Выводим сообщение об ошибке из FastAPI
+                }
+            } catch (error) {
+                alert("Произошла ошибка при отправке запроса: " + error);
+            }
+        }
+    </script>
+</body>
+</html>

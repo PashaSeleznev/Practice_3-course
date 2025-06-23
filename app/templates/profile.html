@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Личный кабинет</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="wrapper">
+        <div class="profile-header">
+            SmartTool
+        </div>
+
+        <div class="profile-page">
+            <div class="profile-page-title">
+                Мой профиль
+            </div>
+            
+            <div class="profile-page-area">
+                <img class="profile-area-img" src="/static/images/account-img.png">
+                <div class="profile-area-info">
+                    <div class="profile-info-text">
+                        <div class="profile-info-name">
+                            Имя пользователя
+                        </div>
+
+                        <div class="profile-info-plot">
+                            {{ user.name }}
+                        </div>
+                    </div>
+
+                    <div class="profile-info-text">
+                        <div class="profile-info-name">
+                            Адрес электронной почты
+                        </div>
+
+                        <div class="profile-info-plot">
+                            {{ user.email }}
+                        </div>
+                    </div>
+
+                    <div class="profile-info-text">
+                        <div class="profile-info-name">
+                            Должность
+                        </div>
+
+                        <div class="profile-info-plot">
+                            {{ user.position }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-page-btns">
+                <div onclick="handleDelete()">Удалить аккаунт</div>
+                <a href="/">Выйти</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function handleDelete() {
+            if (!confirm("Вы уверены, что хотите удалить свой аккаунт? Это действие необратимо.")) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/users/{{ user.id }}`, {
+                    method: "DELETE"
+                });
+
+                if (response.ok) {
+                    alert("Аккаунт успешно удалён.");
+                    window.location.href = "/";
+                } else {
+                    const errorData = await response.json();
+                    alert("Ошибка при удалении: " + errorData.detail);
+                }
+            } catch (error) {
+                alert("Ошибка при отправке запроса: " + error);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Вход</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="wrapper">
+        <div class="enter-background">
+            <img class="enter-background-img"  src="/static/images/login-bg-img.png">
+        </div>
+
+        <div class="header">
+            Добро пожаловать в SmartTool!
+        </div>
+
+        <div class="enter-form">
+            <div class="enter-form-header">
+                <div class="enter-header-text">Вход</div>
+                <div class="enter-header-link">Нет аккаунта? <a href="/register">Зарегистрироваться</a></div>
+            </div>
+            <div class="enter-form-area">
+                <div class="enter-form-field">
+                    <div class="enter-field-text">Адрес электронной почты:</div>
+                    <input class="enter-field-input" type="email" id="email">
+                </div>
+                
+                <div class="enter-form-field">
+                    <div class="enter-field-text">Пароль:</div>
+                    <input class="enter-field-input" type="password" id="password">
+                </div>
+
+                <button class="enter-form-btn" onclick="login()">Войти</button>
+            </div>
+
+             
+        </div>
+    </div>
+
+    <script>
+        async function login() {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            const loginData = {
+                email: email,
+                password: password
+            };
+
+            try {
+                const response = await fetch("/login/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(loginData)
+                });
+
+                if (response.ok) {
+                    // Успешный вход
+                    const data = await response.json()
+                    window.location.href = `/profile/${data.user_id}`;  // Перенаправляем в личный кабинет
+                } else {
+                    // Неудачный вход
+                    const errorData = await response.json();
+                    alert("Ошибка: " + errorData.detail);
+                }
+            } catch (error) {
+                alert("Произошла ошибка при отправке запроса: " + error);
+            }
+        }
+    </script>
+</body>
+</html>
