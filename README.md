@@ -15,6 +15,7 @@
 
 ## Структура проекта
 
+```
 docker-compose.yml
 dockerfile
 requirements.txt
@@ -33,7 +34,7 @@ requirements.txt
   ├── login.html
   ├── profile.html
   └── register.html
-
+```
 ---
 
 ## Функционал
